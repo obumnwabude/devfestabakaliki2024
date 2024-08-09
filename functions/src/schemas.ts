@@ -1,18 +1,19 @@
 export enum School {
-  ebsu,
-  funai
+  ebsu = 'ebsu',
+  funai = 'funai',
+  none = 'none'
 }
 
 export enum Category {
-  premium,
-  luxury
+  premium = 'premium',
+  luxury = 'luxury'
 }
 
 export interface AttendeeInputInfo {
   name: string;
   email: string;
   phone: string;
-  school: School | null;
+  school: School;
   category: Category;
 }
 
@@ -26,4 +27,4 @@ export interface AttendeeInfo extends AttendeeInputInfo {
 }
 
 export const getAmount = ({ category }: AttendeeInputInfo) =>
-  category == Category.premium ? 3000 : 10000;
+  category === Category.premium ? 3000 : 10000;

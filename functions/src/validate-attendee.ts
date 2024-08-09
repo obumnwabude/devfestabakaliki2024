@@ -15,12 +15,10 @@ export const validateAttendee = (data: any): AttendeeInputInfo => {
     throw 'Invalid Phone Number';
   } else if (
     school === undefined ||
-    school !== 'ebsu' ||
-    school !== 'funai' ||
-    school !== null
+    (school !== 'ebsu' && school !== 'funai' && school !== 'none')
   ) {
     throw 'Invalid school';
-  } else if (!category || category !== 'premium' || category !== 'luxury') {
+  } else if (!category || (category !== 'premium' && category !== 'luxury')) {
     throw 'Invalid Category';
   }
   return { name, email, phone, school, category };

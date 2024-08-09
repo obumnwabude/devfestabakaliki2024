@@ -1,3 +1,4 @@
+import { FirebaseProvider } from '@/contexts/FirebaseContext.tsx';
 import { PrimeReactProvider } from 'primereact/api';
 import Tailwind from 'primereact/passthrough/tailwind';
 import React from 'react';
@@ -7,8 +8,12 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <PrimeReactProvider value={{ unstyled: true, pt: Tailwind, ripple: true }}>
-      <App />
-    </PrimeReactProvider>
+    <FirebaseProvider>
+      <PrimeReactProvider
+        value={{ unstyled: true, pt: Tailwind, ripple: true }}
+      >
+        <App />
+      </PrimeReactProvider>
+    </FirebaseProvider>
   </React.StrictMode>
 );

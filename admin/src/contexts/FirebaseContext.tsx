@@ -18,19 +18,28 @@ import {
   Firestore,
   getFirestore
 } from 'firebase/firestore';
+import {
+  connectFunctionsEmulator,
+  Functions,
+  getFunctions
+} from 'firebase/functions';
 import { createContext, ReactNode, useContext, useEffect } from 'react';
 import { firebaseConfig } from './firebase';
 
 interface FirebaseContextProps {
   auth: Auth;
   firestore: Firestore;
+  functions: Functions;
   recordEvent: (event: string, params?: any) => void;
+  recordNavigation: (path: string, name: string) => void;
 }
 
 const FirebaseContext = createContext<FirebaseContextProps>({
   auth: {} as Auth,
   firestore: {} as Firestore,
-  recordEvent: () => {}
+  functions: {} as Functions,
+  recordEvent: () => {},
+  recordNavigation: () => {}
 });
 
 export const useFirebase = () => useContext(FirebaseContext);
@@ -40,9 +49,17 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
   const analytics = getAnalytics(app);
   const auth = getAuth(app);
   const firestore = getFirestore(app);
+  const functions = getFunctions(app);
 
   const recordEvent = (event: string, params?: any) => {
     logEvent(analytics, event, params);
+  };
+
+  const recordNavigation = (path: string, name: string) => {
+    logEvent(analytics, 'screen_view', {
+      firebase_screen: path,
+      firebase_screen_class: name
+    });
   };
 
   useEffect(() => {
@@ -50,6 +67,7 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
       setAnalyticsCollectionEnabled(analytics, false);
       connectAuthEmulator(auth, 'http://localhost:9099');
       connectFirestoreEmulator(firestore, 'localhost', 8080);
+      connectFunctionsEmulator(functions, 'localhost', 5001);
       (window as any).FIREBASE_APPCHECK_DEBUG_TOKEN =
         import.meta.env.VITE_APPCHECK_DEBUG_TOKEN ?? true;
     }
@@ -65,7 +83,9 @@ export const FirebaseProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   return (
-    <FirebaseContext.Provider value={{ auth, firestore, recordEvent }}>
+    <FirebaseContext.Provider
+      value={{ auth, firestore, functions, recordEvent, recordNavigation }}
+    >
       {children}
     </FirebaseContext.Provider>
   );

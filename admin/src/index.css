@@ -17,3 +17,13 @@
   min-height: 100vh;
   padding-top: 64px;
 }
+
+thead .attendee,
+.attendee:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.attendee > * {
+  border-bottom: 1px solid theme(colors.neutral.600);
+  border-right: 1px solid theme(colors.neutral.600);
+}

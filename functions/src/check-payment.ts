@@ -21,6 +21,7 @@ export const checkPayment = async (req: Request, res: Response) => {
     }
 
     let { callerHref, paidTime } = paymentSnapshot.data()!;
+    // This shouldn't happen
     if (!callerHref) {
       res.status(500).json({
         status: false,

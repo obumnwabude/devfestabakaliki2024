@@ -52,6 +52,7 @@ export const initPayment = async (request: CallableRequest) => {
       );
       return url;
     } else {
+      // This shouldn't happen
       throw new HttpsError(
         'internal',
         "Can't lack payment url and you are not an attendee"
@@ -76,7 +77,7 @@ export const initPayment = async (request: CallableRequest) => {
       },
       body: JSON.stringify({
         email,
-        amount: amount * 100,
+        amount: amount * 100, // * 100 is required by Paystack to factor in kobo
         metadata: {
           name: attendeeInputInfo.name,
           phone: attendeeInputInfo.phone

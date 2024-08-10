@@ -5,7 +5,7 @@ export const adminGrantAccess = async (req: Request, res: Response) => {
   const { uid, nickname } = req.query;
 
   if (!uid || typeof uid != 'string') {
-    res.json({ status: false, message: 'Invalid uid' });
+    res.status(400).json({ status: false, message: 'Invalid uid' });
     return;
   }
 
@@ -15,7 +15,7 @@ export const adminGrantAccess = async (req: Request, res: Response) => {
     nickname.trim().length < 3 ||
     nickname.split(' ').length > 1
   ) {
-    res.json({ status: false, message: 'Invalid nickname' });
+    res.status(400).json({ status: false, message: 'Invalid nickname' });
     return;
   }
 
@@ -27,7 +27,7 @@ export const adminGrantAccess = async (req: Request, res: Response) => {
       message: `Successfully set admin and nickname for ${uid}`
     });
   } catch (e: any) {
-    res.json({
+    res.status(500).json({
       status: false,
       message: e['message'] ?? 'Error Occured'
     });

@@ -22,5 +22,8 @@ export const adminAddAttendee = async (request: CallableRequest) => {
     throw new HttpsError('invalid-argument', e);
   }
 
-  await completeRegistration(inputInfo, `admin - ${auth.token.nickname}`);
+  return await completeRegistration(
+    inputInfo,
+    `admin - ${auth.token.nickname}`
+  );
 };

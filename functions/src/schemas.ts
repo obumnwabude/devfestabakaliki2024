@@ -28,3 +28,8 @@ export interface AttendeeInfo extends AttendeeInputInfo {
 
 export const getAmount = ({ category }: AttendeeInputInfo) =>
   category === Category.premium ? 3000 : 10000;
+
+export interface CheckReferenceResult {
+  status: boolean;
+  ticket?: string | undefined;
+}

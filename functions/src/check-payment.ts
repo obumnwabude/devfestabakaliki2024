@@ -10,19 +10,22 @@ export const checkPayment = async (req: Request, res: Response) => {
     const { reference } = req.query;
 
     if (!reference || typeof reference !== 'string') {
-      res.json({ status: false, message: 'Invalid reference' });
+      res.status(400).json({ status: false, message: 'Invalid reference' });
       return;
     }
 
     const paymentSnapshot = await firestore.doc(`/payments/${reference}`).get();
     if (!paymentSnapshot.exists) {
-      res.json({ status: false, message: 'Invalid reference' });
+      res.status(400).json({ status: false, message: 'Invalid reference' });
       return;
     }
 
     let { callerHref, paidTime } = paymentSnapshot.data()!;
     if (!callerHref) {
-      res.json({ status: false, message: 'Invalid saved callerHref link' });
+      res.status(500).json({
+        status: false,
+        message: "Couldn't fetch saved callerHref link"
+      });
       return;
     }
 
@@ -41,7 +44,7 @@ export const checkPayment = async (req: Request, res: Response) => {
       } else {
         console.error('Error in Paystack call');
         console.error(result);
-        res.json({ status: false, message: result.message });
+        res.status(500).json({ status: false, message: result.message });
         return;
       }
 
@@ -61,7 +64,7 @@ export const checkPayment = async (req: Request, res: Response) => {
     }
   } catch (e: any) {
     console.error(e);
-    res.json({
+    res.status(500).json({
       status: false,
       message: e['message'] ?? 'Error Occured'
     });

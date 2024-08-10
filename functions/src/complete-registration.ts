@@ -7,7 +7,7 @@ import { AttendeeInfo, AttendeeInputInfo, getAmount, Payment } from './schemas';
 export const completeRegistration = async (
   inputInfo: AttendeeInputInfo,
   payment: Payment
-) => {
+): Promise<string> => {
   const { email } = inputInfo;
 
   const attendeesRef = firestore.collection('attendees');
@@ -45,4 +45,6 @@ export const completeRegistration = async (
   } else {
     await newAttendeeRef.update({ emailSent: true });
   }
+
+  return ticket;
 };

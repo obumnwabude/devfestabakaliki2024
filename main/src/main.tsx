@@ -5,15 +5,16 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
-
+import '@fontsource-variable/inter';
+import "@fontsource-variable/dm-sans"  
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <FirebaseProvider>
+    {/* <FirebaseProvider> */}
       <PrimeReactProvider
         value={{ unstyled: true, pt: Tailwind, ripple: true }}
       >
         <App />
       </PrimeReactProvider>
-    </FirebaseProvider>
+    {/* </FirebaseProvider> */}
   </React.StrictMode>
 );

@@ -1,15 +1,15 @@
-'use client'
+"use client";
 import { Button } from "@/components/Button";
 import { Container } from "@/components/Container";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { useState } from "react";
 export default function RegisterPage() {
-  const [name, setName ] = useState('Someone great')
-  
+  const [name, setName] = useState("Your Name.");
+
   return (
     <>
-    <Header />
+      <Header />
       <section
         id="speakers"
         aria-labelledby="speakers-title"
@@ -42,8 +42,8 @@ export default function RegisterPage() {
                       name="name"
                       type="text"
                       required
-                      onChange={(e)=>{
-                        setName(e.target.value)
+                      onChange={(e) => {
+                        setName(e.target.value);
                       }}
                       placeholder="John doe"
                       autoComplete="name"
@@ -68,7 +68,7 @@ export default function RegisterPage() {
                         placeholder="example@email.com"
                         autoComplete="email"
                         className="block px-4 w-full rounded-lg !bg-none border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#5d5d5d] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#5d5d5d] sm:text-sm sm:leading-6"
-                        />
+                      />
                     </div>
                   </div>
 
@@ -88,11 +88,34 @@ export default function RegisterPage() {
                         placeholder="09012345678"
                         autoComplete="tel"
                         className="block px-4 w-full rounded-lg !bg-none border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#5d5d5d] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#5d5d5d] sm:text-sm sm:leading-6"
-                        />
+                      />
                     </div>
                   </div>
                 </div>
-                      
+                <div>
+                  <label
+                    htmlFor="from"
+                    className="block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    Community Partner
+                  </label>
+
+                  <div className="mt-2">
+                    <select
+                      className="block px-4 w-full rounded-lg !bg-none border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#5d5d5d] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#5d5d5d] sm:text-sm sm:leading-6"
+                      name="from"
+                      id="from"
+                      required
+                    >
+                      <option value="" selected disabled>
+                        --Select any--
+                      </option>
+                      <option value="gdsc_funai">GDSC Funai</option>
+                      <option value="gdsc_ebsu">GDSC Ebsu</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
                 <div>
                   <label
                     htmlFor="name"
@@ -155,7 +178,12 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <Button type="submit" className="w-full bg-gray-900 rounded-lg text-white hover:bg-gray-800">Purchase Ticket</Button>
+                  <Button
+                    type="submit"
+                    className="w-full bg-gray-900 rounded-lg text-white hover:bg-gray-800"
+                  >
+                    Purchase Ticket
+                  </Button>
                 </div>
               </form>
             </div>
@@ -187,9 +215,7 @@ export default function RegisterPage() {
                   </clipPath>
                 </svg>
               </div>
-              <div
-                className="flex flex-col items-stretch justify-start gap-0 stack aspect-[2/1] text-white relative overflow-hidden bg-[#0a0a0a] [clip-path:url(#ticket-mask-normal)] [-webkit-clip-path:url(#ticket-mask-normal)] p-6 md:p-8 w-full"
-              >
+              <div className="flex flex-col items-stretch justify-start gap-0 stack aspect-[2/1] text-white relative overflow-hidden bg-[#0a0a0a] [clip-path:url(#ticket-mask-normal)] [-webkit-clip-path:url(#ticket-mask-normal)] p-6 md:p-8 w-full">
                 <svg
                   aria-hidden="true"
                   className="absolute top-0 left-0 size-full"
@@ -237,12 +263,8 @@ export default function RegisterPage() {
                     <path d="M0 361.941H458"></path>
                   </g>
                 </svg>
-                <div
-                  className="text-white flex flex-row items-stretch justify-between flex-initial z-[1] h-full"
-                >
-                  <div
-                    className="text-white flex flex-col items-stretch justify-between h-full"
-                  >
+                <div className="text-white flex flex-row items-stretch justify-between flex-initial z-[1] h-full">
+                  <div className="text-white flex flex-col items-stretch justify-between h-full">
                     <div
                       className="flex flex-row items-stretch justify-between h-full"
                       aria-hidden="false"
@@ -264,18 +286,16 @@ export default function RegisterPage() {
                           />
                         </g>
                       </svg>
-                      <div
-                        className="flex ml-2 flex-col items-stretch justify-between"
-                      >
+                      <div className="flex ml-2 flex-col items-stretch justify-between">
                         <div className="flex flex-col items-stretch justify-start max-w-[10em] -mt-1.5">
-                          <p className="font-display text-xl text-gray-50 tracking-tighter  font-semibold !leading-none md:text-3xl ">
+                          <p className={`font-display text-xl ${name !== "Your Name." ? "text-gray-50": "text-[#a0a0a0]"}  tracking-tighter  font-semibold !leading-none md:text-3xl`}>
                             {name}
                           </p>
                         </div>
                         <span
                           className="relative text-left font-mono text-xl md:text-3xl text-[#a0a0a0]"
                           data-version="v1"
-                          aria-label="Ticket number 071336"
+                          aria-label="Ticket number DFAI001"
                         >
                           <svg
                             fill="none"
@@ -290,7 +310,7 @@ export default function RegisterPage() {
                               fillRule="evenodd"
                             ></path>
                           </svg>
-                          <span>071336</span>
+                          <span>DFAI001</span>
                         </span>
                       </div>
                     </div>
@@ -617,7 +637,7 @@ export default function RegisterPage() {
                       </g>
                     </svg>
                     <div className="text-xs md:text-sm text-[#a0a0a0] text-right">
-                      <p>Hall 1, Government House Abakaliki</p>
+                      <p>Abakaliki</p>
                       <p>9AM - 5PM</p>
                     </div>
                   </div>

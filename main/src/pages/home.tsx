@@ -1,5 +1,5 @@
 'use client'
-import './App.css';
+import "../App.css";
 
 
 import { Container } from "@/components/Container";
@@ -24,7 +24,7 @@ const sponsors = [
 ];
 
 
-export default function Example() {
+export default function HomePage() {
   return (
     <>
       <Header />

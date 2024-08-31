@@ -13,12 +13,12 @@ import { isEmail } from 'validator';
 enum School {
   ebsu = 'ebsu',
   aefunai = 'aefunai',
-  none = 'none'
+  none = 'none',
 }
 
 enum Category {
   premium = 'premium',
-  luxury = 'luxury'
+  luxury = 'luxury',
 }
 
 interface AttendeeInputInfo {
@@ -53,7 +53,7 @@ export const RegisterPage = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors }
+    formState: { errors },
   } = useForm<AttendeeInputInfo>();
   const { toast } = useToast();
   const { functions, recordEvent } = useFirebase();
@@ -433,14 +433,25 @@ export const RegisterPage = () => {
                 </div>
               </div>
             </div>
-
             <div>
               <Button
                 type="submit"
-                className="w-full bg-blue-700 rounded-lg text-white"
+                className="w-full bg-blue-700 rounded-lg text-white mt-6"
               >
                 Purchase Ticket
               </Button>
+
+              <p className="text-xs text-center text-gray-900 mt-3">
+                By clicking "Purchase Ticket", you agree to our{' '}
+                <a
+                  href="https://gdg.community.dev/participation-terms/"
+                  className="text-blue-700 underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GDG Event Participation Terms.
+                </a>
+              </p>
             </div>
           </form>
 

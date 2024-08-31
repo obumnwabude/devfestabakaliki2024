@@ -44,18 +44,18 @@ export const initPayment = async (request: CallableRequest) => {
     .where('form.amount', '==', amount) // also checking amount ensures good UX
     .get();
   if (!duplicates.empty) {
-    const { url } = duplicates.docs[0].data();
-    if (url) {
+    const { url, reference } = duplicates.docs[0].data();
+    if (url && reference) {
       await duplicates.docs[0].ref.set(
         { form: { ...attendeeInputInfo, amount } },
         { merge: true }
       );
-      return url;
+      return { url, reference };
     } else {
       // This shouldn't happen
       throw new HttpsError(
         'internal',
-        "Can't lack payment url and you are not an attendee"
+        "Can't lack payment url and reference and you are not an attendee"
       );
     }
   }
@@ -100,7 +100,7 @@ export const initPayment = async (request: CallableRequest) => {
       url: authorization_url,
       initTime: Timestamp.now()
     });
-    return authorization_url;
+    return { url: authorization_url, reference };
   } else {
     console.error('Error in Paystack call');
     console.error(result);

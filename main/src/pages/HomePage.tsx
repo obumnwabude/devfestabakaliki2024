@@ -1,4 +1,5 @@
 import { Countdown } from '@/components/Countdown';
+import { useFirebase } from '@/contexts/FirebaseContext';
 import { Ripple } from 'primereact/ripple';
 import { Link } from 'react-router-dom';
 
@@ -12,6 +13,8 @@ import { Link } from 'react-router-dom';
 // ];
 
 export const HomePage = () => {
+  const { recordEvent } = useFirebase();
+
   return (
     <>
       <section className="relative px-8 lg:px-12 py-32 md:py-48">
@@ -39,6 +42,7 @@ export const HomePage = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full border border-blue-700 py-1.5 px-5 text-base font-semibold text-blue-700 hover:bg-blue-700 hover:text-white sm:grow lg:text-xl lg:py-2 p-ripple"
+            onClick={() => recordEvent('click', { link: 'be_a_speaker_hero' })}
           >
             Be a Speaker
             <Ripple />
@@ -75,6 +79,9 @@ export const HomePage = () => {
                 className="w-full max-w-sm shadow-md mx-auto rounded-md"
                 key={value}
                 data-aos="fade-up"
+                onClick={() =>
+                  recordEvent('click', { detail: `recap_photo_${value}` })
+                }
               />
             );
           })}
@@ -95,6 +102,9 @@ export const HomePage = () => {
                   href="https://drive.google.com/drive/u/0/folders/1mbiAMxmLxuFHTb7wz5apHlMvJ9NhaPUD"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    recordEvent('click', { link: 'view_all_photos' })
+                  }
                 >
                   View All Pictures
                   <Ripple />
@@ -144,6 +154,9 @@ export const HomePage = () => {
                   href="https://bit.ly/CFSDevFestAi"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => {
+                    recordEvent('click', { link: 'be_a_speaker_section' });
+                  }}
                 >
                   Become a Speaker
                   <Ripple />
@@ -171,6 +184,9 @@ export const HomePage = () => {
             href="mailto:gdgabakaliki@gmail.com"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => {
+              recordEvent('click', { link: 'be_a_sponsor_section' });
+            }}
           >
             Become a Sponsor
             <Ripple />

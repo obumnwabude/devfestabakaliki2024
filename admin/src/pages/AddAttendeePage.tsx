@@ -22,7 +22,7 @@ import { isEmail } from 'validator';
 
 enum School {
   ebsu = 'ebsu',
-  funai = 'funai',
+  aefunai = 'aefunai',
   none = 'none'
 }
 
@@ -117,7 +117,7 @@ export const AddAttendeePage = () => {
   const schools = [
     { name: 'none', display: 'Not Applicable' },
     { name: 'ebsu', display: 'EBSU' },
-    { name: 'funai', display: 'FUNAI' }
+    { name: 'aefunai', display: 'AE-FUNAI' }
   ];
 
   const onSubmit: SubmitHandler<AttendeeInputInfo> = async (

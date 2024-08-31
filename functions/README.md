@@ -18,19 +18,19 @@ On our backend side, we have to handle initialization and verification of paymen
 
 [`initPayment`](./src/init-payment.ts) is an [`onCall`](https://firebase.google.com/docs/functions/callable) Cloud Function that should be called ONLY by the main [devfestabakaliki.com](https://devfestabakaliki.com) website.
 
-The main frontend collects attendees' input info (name, email, phone, school, and category) to register the attendees. The "School" is either EBSU, FUNAI, or Not Applicable. The "Category" is either Premium (₦3,000) or Luxury (₦10,000). The frontend then calls `initPayment` with the form inputs AND the current window location (callerHref). callerHref is necessary because at the end of the entire Paystack Redirect flow, the user will be returned back to this callerHref that they started from.
+The main frontend collects attendees' input info (name, email, phone, school, and category) to register the attendees. The "School" is either EBSU, AE-FUNAI, or Not Applicable. The "Category" is either Premium (₦3,000) or Luxury (₦10,000). The frontend then calls `initPayment` with the form inputs AND the current window location (callerHref). callerHref is necessary because at the end of the entire Paystack Redirect flow, the user will be returned back to this callerHref that they started from.
 
 `initPayment` does the following in listed order:
 
 - Validates the input info. If any is missing or not as expected, it throws, otherwise:
 - Checks the `attendees` collection in Firestore if any attendee document is found with the provided email. If found, it throws, otherwise:
-- Checks the `payments` collection in Firestore if any payment document is found with the provided email and amount (gotten from category). If any is found, it updates the firestore payment info with the current inputs and returns the previously saved payment URL, otherwise:
+- Checks the `payments` collection in Firestore if any payment document is found with the provided email and amount (gotten from category). If any is found, it updates the firestore payment info with the current inputs and returns the previously saved payment URL and reference, otherwise:
 - Calls the Paystack Initialize endpoint. If the call wasn't successful or the return data wasn't as expected, it throws, otherwise:
 - Extracts the payment URL and payment reference gotten from Paystack.
 - Creates a payment document in the `payments` collection in Firestore whose document ID is the reference and whose contents include the input infos, callerHref, payment URL, reference, and init timestamp.
-- Returns the payment URL.
+- Returns the payment URL and reference.
 
-The frontend that called this function redirects the user to the returned payment URL. It also catches any thrown errors and gives feedback to the user (like when a registered attendee's email was provided or if supposedly Paystack is down).
+The frontend that called this function redirects the user to the returned payment URL. It also catches any thrown errors and gives feedback to the user (like when a registered attendee's email was provided or if supposedly Paystack is down, (abeg they should never be ooo)).
 
 ### `checkPayment`
 
@@ -49,7 +49,7 @@ Paystack appends the reference as a query (`?refence=...`) to `checkPayment`. `c
 - Calls the Paystack Verify endpoint. If the call wasn't successful or the return data wasn't as expected, it responds with error-details JSON, otherwise:
 - Completes the user registration by creating an attendee document in the `attendees` collection and sends the attendee ticket confirmation email.
 - Updates the payment document with paidTime gotten from the Paystack response while also deleting the saved payment URL (which has now become invalid).
-- Redirects the user to the originally saved callerHref (from where redirections began) while appending the payment reference. 
+- Redirects the user to the originally saved callerHref (from where redirections began) while appending the payment reference.
 
 Redirecting the user to the callerHref effectively ends the Redirect flow since this callerHref is the main frontend from which the user came from. However, the frontend needs to programmatically know what happened during the redirections and give the user appropriate feedback. For this reason, our backend also exposes another helper function that suits the purpose (`checkReference`).
 
@@ -65,11 +65,11 @@ The [admin](../admin) frontend gives select persons the ability to add or regist
 
 ### adminAddAttendee
 
-[`adminAddAttendee`](./src/admin-add-attendee.ts) is an onCall Cloud Function that takes attendee input info, validates them, and simply registers the attendee. 
+[`adminAddAttendee`](./src/admin-add-attendee.ts) is an onCall Cloud Function that takes attendee input info, validates them, and simply registers the attendee.
 
 The expected attendee input info is the same as that provided to `initPayment` (name, email, phone, school, and category). The validation of input info is done by a shared [`validateAttendee`](./src/validate-attendee.ts) helper method. Both `adminAddAttendee` and `initPayment` onCall cloud functions use it.
 
-After validating the input info, `adminAddAttendee` completes the user registration exactly as `checkPayment` does. Infact, they both share the same [`completeRegistration`](./src/complete-registration.ts) helper method for that purpose. This function creates an attendee document in the `attendees` collection and sends the attendee a ticket confirmation email. 
+After validating the input info, `adminAddAttendee` completes the user registration exactly as `checkPayment` does. Infact, they both share the same [`completeRegistration`](./src/complete-registration.ts) helper method for that purpose. This function creates an attendee document in the `attendees` collection and sends the attendee a ticket confirmation email.
 
 The core difference between an admin adding an attendee and an attendee registering themselves by paying through Paystack is in the extra redirections and validations necessary for integrating Paystack. Otherwise, it is all "capture user info" and then "complete the registration".
 
@@ -82,21 +82,21 @@ Completing a Registration is creating a new attendee document and sending the at
 - `ticket`: The ID, padded with zeros to be 3 characters, and prefixed with DFAI24 (short for DevFest AbakalikI 2024). So all tickets will have the format of "DFAI24xxx". This setup easily reconciles admin additions and paystack payments.
 - `timestamp`: When the registration was completed.
 
-After saving the firestore document, the function serializes the new attendee document's content into a URL query string and appends it to the SEND_EMAIL endpoint obtained from `.env` file. 
+After saving the firestore document, the function serializes the new attendee document's content into a URL query string and appends it to the SEND_EMAIL endpoint obtained from `.env` file.
 
-SEND_EMAIL endpoint is a deployed [Google App Script](https://developers.google.com/apps-script) Web App that receives the registered attendee infos and sends a customized email on behalf of GDG Abakaliki. The AppScript also saves the infos into a private Google Sheet. 
+SEND_EMAIL endpoint is a deployed [Google App Script](https://developers.google.com/apps-script) Web App that receives the registered attendee infos and sends a customized email on behalf of GDG Abakaliki. The AppScript also saves the infos into a private Google Sheet.
 
-This setup is a cheap and effective way of sending customized emails without much complexity and just for event registrations. It also allows us to have the same attendee infos in two separate places: Firestore and Google Sheets. 
+This setup is a cheap and effective way of sending customized emails without much complexity and just for event registrations. It also allows us to have the same attendee infos in two separate places: Firestore and Google Sheets.
 
 Having them in Firestore enables us to display them in the Admin portal. Having them in Google Sheets eases email or phone number exports for any future communications.
 
-If the email is successfully sent, the `completeRegistration` method updates the newly created attendee document with an `emailSent` boolean as `true`. 
+If the email is successfully sent, the `completeRegistration` method updates the newly created attendee document with an `emailSent` boolean as `true`.
 
 There is also an `adminRetrySendEmail` onCall Cloud Function that admins can use to retry the sending of emails if in case attendees were successfully registered but there was a failure in the previous send email process.
 
 ## Admin Access
 
-We use Firebase Authentication to sign in the admins with Google in the admin frontend. To be sure that the right persons are accessing Firebase resources (firestore and functions) as admins, we also use [customClaims](https://firebase.google.com/docs/auth/admin/custom-claims) on the User object to ensure the user is an admin. 
+We use Firebase Authentication to sign in the admins with Google in the admin frontend. To be sure that the right persons are accessing Firebase resources (firestore and functions) as admins, we also use [customClaims](https://firebase.google.com/docs/auth/admin/custom-claims) on the User object to ensure the user is an admin.
 
 A Firebase Authentication user can only be granted customClaims through the Firebase Admin SDK. This SDK is essentially what we have in Firebase Cloud Functions. So, we can only upgrade users to admin from within here.
 
@@ -106,17 +106,18 @@ Please if you are working on this project, don't mistakenly deploy them into pro
 
 ## AppCheck
 
-[Firebase AppCheck](https://firebase.google.com/products/app-check) helps prevent abuse in applications. This project uses it to help ensure that calls to the onCall Cloud Functions are from the expected applications. 
+[Firebase AppCheck](https://firebase.google.com/products/app-check) helps prevent abuse in applications. This project uses it to help ensure that calls to the onCall Cloud Functions are from the expected applications.
 
 `initPayment` and `checkReference` will fail if AppCheck didn't successfully verify and if the appId in the call data does not match the Firebase registered web app for the main frontend.
 
 This is the same with `adminAddAttendee` cloud function. It verifies AppCheck and verifies the caller appId to match that of the admin app. In addition, it checks the auth token in the call data to be sure the caller has the admin customClaims.
 
-These checks are done before the execution of the bodies of these functions. These checks are aimed at securing the entire project. 
+These checks are done before the execution of the bodies of these functions. These checks are aimed at securing the entire project.
 
 ## Security
-Any valuable used in this project was not committed git. Valuables here include: firebase config data and contents of `.env`s (paystack keys, recaptcha keys, appcheck debug tokens, appIds, send email url, ...) 
 
-All these are to enhance security. If in case you find a bug, please help indicate and possibly help solve it. 
+Any valuable used in this project was not committed git. Valuables here include: firebase config data and contents of `.env`s (paystack keys, recaptcha keys, appcheck debug tokens, appIds, send email url, ...)
+
+All these are to enhance security. If in case you find a bug, please help indicate and possibly help solve it.
 
 Thanks.

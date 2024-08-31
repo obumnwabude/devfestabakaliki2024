@@ -54,15 +54,9 @@ export const checkPayment = async (req: Request, res: Response) => {
       await paymentSnapshot.ref.update({ paidTime, url: FieldValue.delete() });
     }
 
-    const callerHrefParts = callerHref.split('#');
-    if (callerHrefParts.length > 1) {
-      const anchor = callerHrefParts.pop();
-      res.redirect(
-        `${callerHrefParts.join('')}?reference=${reference}#${anchor}`
-      );
-    } else {
-      res.redirect(`${callerHref}?reference=${reference}`);
-    }
+    const redirectUrl = new URL(callerHref);
+    redirectUrl.searchParams.set('reference', reference);
+    res.redirect(redirectUrl.toString());
   } catch (e: any) {
     console.error(e);
     res.status(500).json({

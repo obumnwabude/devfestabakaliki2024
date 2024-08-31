@@ -1,15 +1,16 @@
 import { onCall, onRequest } from 'firebase-functions/v2/https';
 import { adminAddAttendee as aaaFn } from './admin-add-attendee';
-import { adminRetrySendEmail as arseFn } from './admin-retry-send-email';
+// import { adminRetrySendEmail as arseFn } from './admin-retry-send-email';
 import { checkPayment as checkPaymentFn } from './check-payment';
 import { checkReference as checkRefFn } from './check-reference';
 import { initPayment as initPaymentFn } from './init-payment';
 
-export const adminAddAttendee = onCall({ enforceAppCheck: true }, aaaFn);
-export const adminRetrySendEmail = onCall({ enforceAppCheck: true }, arseFn);
+const opts = { cors: true, enforceAppCheck: true };
+export const adminAddAttendee = onCall(opts, aaaFn);
+// export const adminRetrySendEmail = onCall(opts, arseFn);
 export const checkPayment = onRequest(checkPaymentFn);
-export const checkReference = onCall({ enforceAppCheck: true }, checkRefFn);
-export const initPayment = onCall({ enforceAppCheck: true }, initPaymentFn);
+export const checkReference = onCall(opts, checkRefFn);
+export const initPayment = onCall(opts, initPaymentFn);
 
 // These 2 functions should not enter production or be available to the public.
 // They are only here to grant access to requestees but through the firebase

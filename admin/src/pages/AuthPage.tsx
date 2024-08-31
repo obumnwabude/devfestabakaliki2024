@@ -3,7 +3,7 @@ import { useFirebase } from '@/contexts/FirebaseContext';
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithRedirect
+  signInWithPopup
 } from 'firebase/auth';
 import { Ripple } from 'primereact/ripple';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ export const AuthPage = () => {
   const [waitingApproval, setWaitingApproval] = useState(false);
 
   const signIn = async () => {
-    const result = await signInWithRedirect(auth, new GoogleAuthProvider());
+    const result = await signInWithPopup(auth, new GoogleAuthProvider());
     if (result) recordEvent('login', { method: 'google' });
   };
 

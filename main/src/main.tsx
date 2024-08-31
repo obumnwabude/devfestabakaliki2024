@@ -1,4 +1,5 @@
-// import { FirebaseProvider } from "@/contexts/FirebaseContext.tsx";
+import { FirebaseProvider } from '@/contexts/FirebaseContext.tsx';
+import { ToastProvider } from '@/contexts/ToastContext';
 import '@fontsource-variable/dm-sans';
 import '@fontsource-variable/inter';
 import { PrimeReactProvider } from 'primereact/api';
@@ -10,10 +11,12 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    {/* <FirebaseProvider> */}
     <PrimeReactProvider value={{ unstyled: true, pt: Tailwind, ripple: true }}>
-      <App />
+      <ToastProvider>
+        <FirebaseProvider>
+          <App />
+        </FirebaseProvider>
+      </ToastProvider>
     </PrimeReactProvider>
-    {/* </FirebaseProvider> */}
   </React.StrictMode>
 );

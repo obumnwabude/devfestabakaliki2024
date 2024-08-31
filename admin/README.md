@@ -12,7 +12,7 @@ These customClaims are also important because the Cloud Function that adds atten
 
 ## Adding Attendees
 
-The `/add` page contains a form with five fields (name, email, phone, school, and category). "School" is a dropdown to select either EBSU, FUNAI, or Not Applicable. "Category" is a dropdown to select either Premium (₦3,000) or Luxury (₦10,000). The other personal info fields have their proper input validation. The "phone" field expects a valid Nigerian phone number formatted in e164 (international) format. 
+The `/add` page contains a form with five fields (name, email, phone, school, and category). "School" is a dropdown to select either EBSU, AE-FUNAI, or Not Applicable. "Category" is a dropdown to select either Premium (₦3,000) or Luxury (₦10,000). The other personal info fields have their proper input validation. The "phone" field expects a valid Nigerian phone number formatted in e164 (international) format. 
 
 Clicking the "Add" button validates the form. If validated, the `adminAddAttendee` is called with the filled form's data. If addition is successful, the page navigates to `/` and displays the attendees table with this latest added attendee on the top. 
 

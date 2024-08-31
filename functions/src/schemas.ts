@@ -1,6 +1,6 @@
 export enum School {
   ebsu = 'ebsu',
-  funai = 'funai',
+  aefunai = 'aefunai',
   none = 'none'
 }
 

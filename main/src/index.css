@@ -8,3 +8,95 @@
   @tailwind components;
   @tailwind utilities;
 }
+
+:root {
+  --df-blue-core: #4285f4;
+  --df-blue-halftone: #57caff;
+  --df-blue-pastel: #c3ecf6;
+  --df-green-core: #34a853;
+  --df-green-halftone: #5cdb6d;
+  --df-green-pastel: #ccf6c5;
+  --df-red-core: #ea4335;
+  --df-red-halftone: #ff7daf;
+  --df-red-pastel: #f8d8d8;
+  --df-yellow-core: #f9ab00;
+  --df-yellow-halftone: #ffd427;
+  --df-yellow-pastel: #ffe7a5;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@keyframes movebg {
+  0% {
+    background-position: calc(100% + (var(--bg-i) * 100%)) 50%;
+  }
+  100% {
+    background-position: calc(0% + (var(--bg-i) * 100%)) 50%;
+  }
+}
+
+@keyframes movecolor {
+  25% {
+    border-color: var(--df-blue-core);
+    color: theme(colors.blue.950);
+  }
+  50% {
+    border-color: var(--df-yellow-core);
+    color: theme(colors.yellow.950);
+  }
+  75% {
+    border-color: var(--df-green-core);
+    color: theme(colors.green.950);
+  }
+  100% {
+    border-color: var(--df-red-core);
+    color: theme(colors.red.950);
+  }
+}
+
+.animate-movebg {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--df-blue-halftone),
+    var(--df-blue-core),
+    var(--df-blue-core),
+    var(--df-blue-halftone),
+    var(--df-red-halftone),
+    var(--df-red-core),
+    var(--df-red-core),
+    var(--df-red-halftone),
+    var(--df-green-halftone),
+    var(--df-green-core),
+    var(--df-green-core),
+    var(--df-green-halftone),
+    var(--df-yellow-halftone),
+    var(--df-yellow-core),
+    var(--df-yellow-core),
+    var(--df-yellow-halftone)
+  );
+  background-size: 400% 100%;
+  background-repeat: repeat-x;
+  animation: movebg 12s ease-in-out infinite;
+}
+
+.animate-countdown {
+  animation: movebg 12s ease-in-out infinite,
+    movecolor 12s calc((var(--color-i) * 3s)) ease-in-out infinite;
+}
+
+@keyframes movedown {
+  0% {
+    transform: translate(0px, -50%);
+  }
+  40% {
+    transform: translate3d(0px, 0%, 0);
+  }
+}
+
+.animate-movedown {
+  animation: movedown 1s linear infinite;
+}

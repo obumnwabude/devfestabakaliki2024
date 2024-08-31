@@ -1,25 +1,26 @@
-import { Container } from "./Container"
-import { Button } from "./Button"
-import logoImage from "@/public/images/DF24-Logo.png";
-export default function Header(){
-    return(
-        <>
-         <header className="relative z-50 flex-none lg:pt-11">
-        <Container className="flex flex-wrap items-center justify-center sm:justify-between lg:flex-nowrap">
-          <div className="mt-10 lg:mt-0 lg:grow lg:basis-0">
-            <img
-              src={logoImage}
-              height={51}
-              alt=""
-              width={176}
-            />
-          </div>
+import { Ripple } from 'primereact/ripple';
+import { Link } from 'react-router-dom';
 
-          <div className="hidden sm:mt-10 sm:flex lg:mt-0 lg:grow lg:basis-0 lg:justify-end">
-            <Button href="/register">Get your tickets</Button>
-          </div>
-        </Container>
-      </header>
-        </>
-    )
-}
+export const Header = () => {
+  return (
+    <header className="px-6 sm:px-10 py-4 md:py-6 fixed xs:px-8 top-0 left-0 right-0 z-10 h-18 md:h-24 bg-opacity-10 backdrop-blur-lg bg-white/[0.1] flex justify-between">
+      <h1>
+        <Link to="/">
+          <img
+            src="/assets/dfai24-logo-header.png"
+            alt="DevFest Abakaliki"
+            className="h-10 md:h-16"
+          />
+        </Link>
+      </h1>
+
+      <Link
+        to="/register"
+        className="max-[360px]:scale-75 max-[360px]:-mr-4 pt-1 pb-2 px-4 font-semibold rounded-full bg-blue-700 text-white h-fit p-ripple"
+      >
+        Get your Ticket
+        <Ripple />
+      </Link>
+    </header>
+  );
+};

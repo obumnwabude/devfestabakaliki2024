@@ -85,33 +85,6 @@ export const HomePage = () => {
               />
             );
           })}
-          <div
-            className="w-full max-w-sm mx-auto rounded-md relative p-[36%] bg-red-100"
-            data-aos="fade-up"
-          >
-            <div className="absolute top-0 left-0 right-0 bottom-0 p-6 flex flex-col items-center">
-              <img
-                src="/assets/img-placeholder.jpg"
-                className="rounded-xl h-1/2 mb-4"
-                alt=""
-                aria-hidden="true"
-              />
-              <div className="text-center static flex justify-center items-center grow">
-                <a
-                  className="rounded-full py-2 px-6 bg-df-red-core text-white text-lg p-ripple"
-                  href="https://drive.google.com/drive/u/0/folders/1mbiAMxmLxuFHTb7wz5apHlMvJ9NhaPUD"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() =>
-                    recordEvent('click', { link: 'view_all_photos' })
-                  }
-                >
-                  View All Pictures
-                  <Ripple />
-                </a>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -10,12 +10,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import BounceLoader from 'react-spinners/BounceLoader';
 import { isEmail } from 'validator';
 
-enum School {
-  ebsu = 'ebsu',
-  aefunai = 'aefunai',
-  none = 'none',
-}
-
 enum Category {
   premium = 'premium',
   luxury = 'luxury',
@@ -25,11 +19,11 @@ interface AttendeeInputInfo {
   name: string;
   email: string;
   phone: string;
-  school: School;
   category: Category;
 }
 
 interface InitPaymentRequest extends AttendeeInputInfo {
+  school: string;
   callerHref: string;
 }
 
@@ -70,7 +64,7 @@ export const RegisterPage = () => {
       >(
         functions,
         'initPayment'
-      )({ ...info, callerHref: window.location.href });
+      )({ ...info, school: 'none', callerHref: window.location.href });
       const { url, reference } = response.data;
       recordEvent('init_payment', { reference });
       window.location.assign(url);
@@ -345,33 +339,6 @@ export const RegisterPage = () => {
             </div>
             <div>
               <label
-                htmlFor="school"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Your School
-              </label>
-
-              <div className="mt-2">
-                <select
-                  className="block px-4 w-full rounded-lg !bg-none border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-[#5d5d5d] placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-[#5d5d5d] sm:text-sm sm:leading-6"
-                  id="school"
-                  required
-                  {...register('school', { required: 'Required' })}
-                >
-                  <option value="">Select School</option>
-                  <option value="none">Not Applicable</option>
-                  <option value="ebsu">EBSU</option>
-                  <option value="aefunai">AE-FUNAI</option>
-                </select>
-                {errors.school && (
-                  <p className="text-red-700 text-sm mb-4">
-                    {errors.school!.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div>
-              <label
                 htmlFor="category"
                 className="block text-sm font-medium leading-6 text-gray-900"
               >
@@ -405,7 +372,7 @@ export const RegisterPage = () => {
                       </span>
                     </div>
                     <p className="mt-3.5 w-full text-left text-sm font-medium text-[#4f4f4f] peer-checked:text-[#a0a0a0]">
-                      Event Access Only.
+                      Event Access + Refreshment.
                     </p>
                   </label>
 
@@ -427,7 +394,7 @@ export const RegisterPage = () => {
                       </span>
                     </div>
                     <p className="mt-3.5 w-full text-left text-sm font-medium text-[#4f4f4f] peer-checked:text-[#a0a0a0]">
-                      Event Access + Merch.
+                      Event Access + Refreshment + Swags + Merch.
                     </p>
                   </label>
                 </div>

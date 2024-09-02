@@ -14,28 +14,21 @@ import {
   RegisterOptions,
   SubmitHandler,
   useForm,
-  UseFormRegister
+  UseFormRegister,
 } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import BounceLoader from 'react-spinners/BounceLoader';
 import { isEmail } from 'validator';
 
-enum School {
-  ebsu = 'ebsu',
-  aefunai = 'aefunai',
-  none = 'none'
-}
-
 enum Category {
   premium = 'premium',
-  luxury = 'luxury'
+  luxury = 'luxury',
 }
 
 interface AttendeeInputInfo {
   name: string;
   email: string;
   phone: string;
-  school: School;
   category: Category;
 }
 
@@ -103,21 +96,16 @@ export const AddAttendeePage = () => {
     control,
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors },
   } = useForm<AttendeeInputInfo>({
-    defaultValues: { school: School.none, category: Category.premium }
+    defaultValues: { category: Category.premium },
   });
   const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const categories = [
     { name: 'premium', display: 'Premium ₦3,000' },
-    { name: 'luxury', display: 'Luxury ₦10,000' }
-  ];
-  const schools = [
-    { name: 'none', display: 'Not Applicable' },
-    { name: 'ebsu', display: 'EBSU' },
-    { name: 'aefunai', display: 'AE-FUNAI' }
+    { name: 'luxury', display: 'Luxury ₦10,000' },
   ];
 
   const onSubmit: SubmitHandler<AttendeeInputInfo> = async (
@@ -125,7 +113,10 @@ export const AddAttendeePage = () => {
   ) => {
     try {
       setLoading(true);
-      const ticket = await httpsCallable(functions, 'adminAddAttendee')(info);
+      const ticket = await httpsCallable(
+        functions,
+        'adminAddAttendee'
+      )({ ...info, school: 'none' });
       recordEvent('admin_added_attendee', { ticket });
       toast({ detail: 'Attendee added successfully', success: true });
       setLoading(false);
@@ -133,7 +124,7 @@ export const AddAttendeePage = () => {
     } catch (e: any) {
       toast({
         detail: e['message'] ?? e ?? 'An error occurred',
-        success: false
+        success: false,
       });
       setLoading(false);
     }
@@ -179,8 +170,8 @@ export const AddAttendeePage = () => {
                   register,
                   label: 'name',
                   rules: {
-                    minLength: { message: 'At least 3 characters', value: 3 }
-                  }
+                    minLength: { message: 'At least 3 characters', value: 3 },
+                  },
                 }}
               />
               <Input
@@ -189,8 +180,9 @@ export const AddAttendeePage = () => {
                   register,
                   label: 'email',
                   rules: {
-                    validate: (v) => (isEmail(v ?? '') ? true : 'Invalid Email')
-                  }
+                    validate: (v) =>
+                      isEmail(v ?? '') ? true : 'Invalid Email',
+                  },
                 }}
               />
               <Input
@@ -202,14 +194,13 @@ export const AddAttendeePage = () => {
                   rules: {
                     pattern: {
                       message: 'Invalid Nigerian Number',
-                      value: /^\+234[789][01]\d{8}$/
-                    }
-                  }
+                      value: /^\+234[789][01]\d{8}$/,
+                    },
+                  },
                 }}
               />
             </div>
             <div className="md:grow">
-              <Select {...{ control, label: 'school', options: schools }} />
               <Select
                 {...{ control, label: 'category', options: categories }}
               />

@@ -3,14 +3,7 @@ import { useFirebase } from '@/contexts/FirebaseContext';
 import { Ripple } from 'primereact/ripple';
 import { Link } from 'react-router-dom';
 
-// const sponsors = [
-//   'transistor',
-//   'tuple',
-//   'statickit',
-//   'mirage',
-//   'laravel',
-//   'statamic'
-// ];
+const sponsors = [{ name: 'IHECHIKARA', fileName: 'IHECHIKARA.png' }];
 
 export const HomePage = () => {
   const { recordEvent } = useFirebase();
@@ -152,29 +145,34 @@ export const HomePage = () => {
             Our Sponsors are the best in the industry, they make this event
             possible.
           </p>
-          <a
-            className="rounded-full py-2 px-6 shadow-md bg-df-yellow-core text-white text-lg p-ripple"
-            href="mailto:gdgabakaliki@gmail.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => {
-              recordEvent('click', { link: 'be_a_sponsor_section' });
-            }}
-          >
-            Become a Sponsor
-            <Ripple />
-          </a>
-        </div>
 
-        {/* <div className="mt-14 grid grid-cols-1 items-start gap-x-8 gap-y-8 sm:mt-16 sm:gap-y-16 lg:mt-24 lg:grid-cols-4">
+        
+        </div>
+        <div>
+        <div className="mt-14 grid grid-cols-1 items-start gap-x-8 gap-y-8 sm:mt-16 sm:gap-y-16 lg:mt-24 lg:grid-cols-4">
             {sponsors.map((sponsor) => (
               <img
-                key={sponsor}
-                src={`/assets/${sponsor}.svg`}
-                alt={sponsor[0].toUpperCase() + sponsor.slice(1)}
+                key={sponsor.name}
+                src={`/assets/${sponsor.fileName}`}
+                alt={sponsor.name[0].toUpperCase() + sponsor.name.slice(1)}
               />
             ))}
-          </div> */}
+          </div>
+          <div className="flex mt-10 justify-end">
+            <a
+              className="rounded-full  inline-block py-2 px-6 shadow-md bg-df-yellow-core text-white text-lg p-ripple"
+              href="mailto:gdgabakaliki@gmail.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => {
+                recordEvent('click', { link: 'be_a_sponsor_section' });
+              }}
+            >
+              Become a Sponsor
+              <Ripple />
+            </a>
+          </div>
+        </div>
       </section>
 
       <section className="px-8 lg:px-12 py-20 sm:py-32 bg-df-green-pastel">

@@ -3,7 +3,13 @@ import { useFirebase } from '@/contexts/FirebaseContext';
 import { Ripple } from 'primereact/ripple';
 import { Link } from 'react-router-dom';
 
-const sponsors = [{ name: 'IHECHIKARA', fileName: 'IHECHIKARA.png' }];
+const sponsors = [
+  {
+    name: 'IHECHIKARA',
+    fileName: 'IHECHIKARA.png',
+    link: 'https://youtube.com/@ihechikara',
+  },
+];
 
 export const HomePage = () => {
   const { recordEvent } = useFirebase();
@@ -145,17 +151,23 @@ export const HomePage = () => {
             Our Sponsors are the best in the industry, they make this event
             possible.
           </p>
-
-        
         </div>
         <div>
-        <div className="mt-14 grid grid-cols-1 items-start gap-x-8 gap-y-8 sm:mt-16 sm:gap-y-16 lg:mt-24 lg:grid-cols-4">
+          <div className="mt-14 grid grid-cols-1 items-start gap-x-8 gap-y-8 sm:mt-16 sm:gap-y-16 lg:mt-24 lg:grid-cols-4">
             {sponsors.map((sponsor) => (
-              <img
+              <a
+                href={sponsor.link}
+                rel="noopener noreferer"
+                target="_blank"
+                title={sponsor.name}
                 key={sponsor.name}
-                src={`/assets/${sponsor.fileName}`}
-                alt={sponsor.name[0].toUpperCase() + sponsor.name.slice(1)}
-              />
+              >
+                <img
+                  key={sponsor.name}
+                  src={`/assets/${sponsor.fileName}`}
+                  alt={sponsor.name[0].toUpperCase() + sponsor.name.slice(1)}
+                />
+              </a>
             ))}
           </div>
           <div className="flex mt-10 justify-end">

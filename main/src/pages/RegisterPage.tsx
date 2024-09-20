@@ -47,6 +47,7 @@ export const RegisterPage = () => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<AttendeeInputInfo>();
   const { toast } = useToast();
@@ -58,16 +59,37 @@ export const RegisterPage = () => {
   ) => {
     try {
       setIsLoading(true);
-      const response = await httpsCallable<
-        InitPaymentRequest,
-        InitPaymentResponse
-      >(
-        functions,
-        'initPayment'
-      )({ ...info, school: 'none', callerHref: window.location.href });
-      const { url, reference } = response.data;
-      recordEvent('init_payment', { reference });
-      window.location.assign(url);
+      if (info.category === Category.luxury) {
+        const response = await httpsCallable<
+          InitPaymentRequest,
+          InitPaymentResponse
+        >(
+          functions,
+          'initPayment'
+        )({ ...info, school: 'none', callerHref: window.location.href });
+        const { url, reference } = response.data;
+        recordEvent('init_payment', { reference });
+        window.location.assign(url);
+      } else {
+        const response = await httpsCallable<
+          AttendeeInputInfo & { school: string },
+          CheckReferenceResponse
+        >(
+          functions,
+          'registerAttendeeFree'
+        )({ ...info, school: 'none' });
+        const { status, name, ticket } = response.data;
+        if (status) {
+          recordEvent('free_registration', { ticket });
+          setSuccessName(name ?? '');
+          setSuccessTicket(ticket ?? '');
+          setIsShowingConfetti(true);
+          toast({ detail: 'You have successfully registered', success: true });
+        } else {
+          toast({ detail: 'Registration Unsuccessful', success: false });
+        }
+        setIsLoading(false);
+      }
     } catch (e: any) {
       toast({
         detail: e['message'] ?? e ?? 'An error occurred',
@@ -217,6 +239,7 @@ export const RegisterPage = () => {
                 onClick={() => {
                   setSuccessName('');
                   setSuccessTicket('');
+                  reset();
                   recordEvent('purchased_another_ticket');
                 }}
                 className="w-full bg-blue-700 rounded-lg text-white"
@@ -367,8 +390,8 @@ export const RegisterPage = () => {
                       <p className=" text-left text-lg font-semibold">
                         Premium
                       </p>
-                      <span className="relative inline-flex items-center overflow-hidden rounded-sm px-2 font-mono text-sm font-medium uppercase">
-                        ₦3,000
+                      <span className="relative inline-flex items-center overflow-hidden rounded-sm px-2 font-mono text-sm font-bold uppercase">
+                        FREE
                       </span>
                     </div>
                     <p className="mt-3.5 w-full text-left text-sm font-medium text-[#4f4f4f] peer-checked:text-[#a0a0a0]">
@@ -390,7 +413,7 @@ export const RegisterPage = () => {
                     <div className="flex w-full items-center justify-between gap-x-3">
                       <p className=" text-left text-lg font-semibold">Luxury</p>
                       <span className="relative inline-flex items-center overflow-hidden rounded-sm px-2 font-mono text-sm font-medium uppercase">
-                        ₦10,000
+                        ₦5,000
                       </span>
                     </div>
                     <p className="mt-3.5 w-full text-left text-sm font-medium text-[#4f4f4f] peer-checked:text-[#a0a0a0]">

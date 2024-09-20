@@ -4,6 +4,7 @@ import { adminAddAttendee as aaaFn } from './admin-add-attendee';
 import { checkPayment as checkPaymentFn } from './check-payment';
 import { checkReference as checkRefFn } from './check-reference';
 import { initPayment as initPaymentFn } from './init-payment';
+import { registerAttendeeFree as regFn } from './register-attendee-free';
 
 const opts = { cors: true, enforceAppCheck: true };
 export const adminAddAttendee = onCall(opts, aaaFn);
@@ -11,6 +12,7 @@ export const adminAddAttendee = onCall(opts, aaaFn);
 export const checkPayment = onRequest(checkPaymentFn);
 export const checkReference = onCall(opts, checkRefFn);
 export const initPayment = onCall(opts, initPaymentFn);
+export const registerAttendeeFree = onCall(opts, regFn);
 
 // These 2 functions should not enter production or be available to the public.
 // They are only here to grant access to requestees but through the firebase

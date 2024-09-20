@@ -104,8 +104,8 @@ export const AddAttendeePage = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const categories = [
-    { name: 'premium', display: 'Premium ₦3,000' },
-    { name: 'luxury', display: 'Luxury ₦10,000' },
+    { name: 'premium', display: 'Premium FREE' },
+    { name: 'luxury', display: 'Luxury ₦5,000' },
   ];
 
   const onSubmit: SubmitHandler<AttendeeInputInfo> = async (

@@ -12,8 +12,8 @@ The code for [devfestabakaliki.com](https://devfestabakaliki.com)'s website is i
 
 We currently have 2 ticket categories:
 
-1. Premium: Event Access for ₦3,000
-2. Luxury: Event and Swag Access for ₦10,000
+1. Premium: Event Access for FREE
+2. Luxury: Event and Swag Access for ₦5,000
 
 ## Admin
 

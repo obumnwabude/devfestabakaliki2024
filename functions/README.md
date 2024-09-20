@@ -94,6 +94,10 @@ If the email is successfully sent, the `completeRegistration` method updates the
 
 There is also an `adminRetrySendEmail` onCall Cloud Function that admins can use to retry the sending of emails if in case attendees were successfully registered but there was a failure in the previous send email process.
 
+## FREE Tickets 
+
+If the attendee is not paying for Swag, registration is free. The `registerAttendeeFree` function is simply called.
+
 ## Admin Access
 
 We use Firebase Authentication to sign in the admins with Google in the admin frontend. To be sure that the right persons are accessing Firebase resources (firestore and functions) as admins, we also use [customClaims](https://firebase.google.com/docs/auth/admin/custom-claims) on the User object to ensure the user is an admin.

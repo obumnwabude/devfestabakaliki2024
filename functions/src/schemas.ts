@@ -17,7 +17,10 @@ export interface AttendeeInputInfo {
   category: Category;
 }
 
-export type Payment = `admin - ${string}` | `paystack - ${string}`;
+export type Payment =
+  | `admin - ${string}`
+  | `paystack - ${string}`
+  | 'self - free';
 
 export interface AttendeeInfo extends AttendeeInputInfo {
   amount: number;
@@ -27,7 +30,7 @@ export interface AttendeeInfo extends AttendeeInputInfo {
 }
 
 export const getAmount = ({ category }: AttendeeInputInfo) =>
-  category === Category.premium ? 3000 : 10000;
+  category === Category.premium ? 0 : 5000;
 
 export interface CheckReferenceResult {
   status: boolean;
